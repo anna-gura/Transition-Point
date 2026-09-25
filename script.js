@@ -251,7 +251,7 @@ gl_FragColor=vec4(clamp(col,0.,1.),1.);}
   P.pickStage = function () {
     this.mobile = this.mq.matches;
     this.st = document.querySelector(this.mobile ? '.stage-m' : '.stage-d');
-    this.SW = this.mobile ? 390 : 1040; this.SH = this.mobile ? 844 : 650;
+    this.SW = this.mobile ? 284 : 1040; this.SH = this.mobile ? 616 : 650;
     var q = (n) => this.st.querySelector('[data-ref="' + n + '"]');
     this.titleEl = document.querySelector('.hero-title'); this.introEl = document.querySelector('.hero-intro'); this.finalEl = q('Final'); this.faqEl = q('Faq'); this.faqInner = q('FaqInner');
     this.infoEl = q('Info'); this.faqBox = q('FaqBox'); this.dawnEl = q('Dawn'); this.backArr = q('BackArr');
@@ -305,7 +305,8 @@ gl_FragColor=vec4(clamp(col,0.,1.),1.);}
     var acts = {
       enter: function () { self.go(2); }, wantJoin: function () { self.wantJoin(); }, join: function () { self.doJoin(); },
       openFaq: function () { self.openFaq(); }, closeFaq: function () { self.closeFaq(); },
-      backWarm: function () { self.backWarm(); }, backWater: function () { self.backWater(); }
+      backWarm: function () { self.backWarm(); }, backWater: function () { self.backWater(); },
+      q0: function () { self.selQ(0); }, q1: function () { self.selQ(1); }, q2: function () { self.selQ(2); }, q3: function () { self.selQ(3); }
     };
     document.querySelectorAll('[data-act]').forEach(function (el) {
       el.addEventListener('click', function (e) { var f = acts[el.getAttribute('data-act')]; if (f) { e.preventDefault(); f(); } });
@@ -316,8 +317,8 @@ gl_FragColor=vec4(clamp(col,0.,1.),1.);}
       if (e.key === 'ArrowDown' || e.key === 'PageDown') { e.preventDefault(); self.input(200); }
       if (e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); self.input(-200); }
     });
-    window.addEventListener('wheel', function (e) { e.preventDefault(); self.input(e.deltaY); }, { passive: false });
-    window.addEventListener('touchstart', function (e) { self.ty0 = e.touches[0].clientY; }, { passive: true });
+    window.addEventListener('wheel', function (e) { e.preventDefault(); self.touching = false; self.input(e.deltaY); }, { passive: false });
+    window.addEventListener('touchstart', function (e) { self.ty0 = e.touches[0].clientY; self.touching = true; }, { passive: true });
     window.addEventListener('touchmove', function (e) { if (self.ty0 == null) return; e.preventDefault(); var y = e.touches[0].clientY; self.input((self.ty0 - y) * 2.2); self.ty0 = y; }, { passive: false });
     window.addEventListener('touchend', function () { self.ty0 = null; });
     window.addEventListener('pointermove', function (e) { self.tx = (e.clientX / window.innerWidth - 0.5) * 2; self.ty = (e.clientY / window.innerHeight - 0.5) * 2; });
@@ -358,6 +359,9 @@ gl_FragColor=vec4(clamp(col,0.,1.),1.);}
     while ((node = walker.nextNode())) {
       var txt = node.nodeValue;
       if (!txt || !txt.trim()) continue;
+      var op = 1;
+      for (var pe = node.parentElement; pe && pe !== src.parentElement; pe = pe.parentElement) op *= parseFloat(getComputedStyle(pe).opacity);
+      if (op < 0.05) continue;
       var cs = getComputedStyle(node.parentElement);
       g.font = cs.fontStyle + ' ' + cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
       g.fillStyle = cs.color;
@@ -415,8 +419,21 @@ gl_FragColor=vec4(clamp(col,0.,1.),1.);}
     this.anim('dust', 0, 1, 1.5, 0);
     this.anim('qa', 1, 0, 1.0, 0.25);
     this.anim('grow', 1, 0, 1.9, 0.8);
-    this.later(2400, function () { self.view = 'info'; self.infoVis = true; self.replay(self.infoEl); });
+    this.later(2400, function () { if (self.faqBox) self.faqBox.setAttribute('data-sel', '-1'); self.view = 'info'; self.infoVis = true; self.replay(self.infoEl); });
     this.later(2800, function () { self.endDust(); self.swapping = false; });
+  };
+  P.selQ = function (i) {
+    if (this.view !== 'faq' || this.swapping) return;
+    var box = this.faqBox; if (!box) return;
+    var cur = parseInt(box.getAttribute('data-sel'), 10);
+    var btn = box.querySelectorAll('.qbtn')[i];
+    if (btn && cur !== i) {
+      var qe = btn.querySelector('.qq'), ae = btn.querySelector('.ans');
+      var qh = qe.offsetHeight, ah = ae.offsetHeight, gap = 12;
+      var tot = qh + gap + ah, qy = -tot / 2 + qh / 2, ay = qy + qh / 2 + gap + ah / 2;
+      btn.style.setProperty('--qy', qy.toFixed(1) + 'px'); btn.style.setProperty('--ay', ay.toFixed(1) + 'px');
+    }
+    box.setAttribute('data-sel', String(cur === i ? -1 : i));
   };
   P.doJoin = function () {
     var now = performance.now(); if (this.phase !== 'water' || this.busy(now) || this.swapping || this.view !== 'info') return;
@@ -462,11 +479,12 @@ gl_FragColor=vec4(clamp(col,0.,1.),1.);}
     var T = 140;
     if (this.phase === 'dawn') { if (this.acc < -T) { this.acc = 0; this.backWater(); } return; }
     if (this.phase === 'water') {
+      if (this.view === 'faq') { if (this.acc < -T) { this.acc = 0; this.closeFaq(); } return; }
       if (this.view !== 'info') return;
       if (this.acc > T) { this.acc = 0; this.doJoin(); } else if (this.acc < -T) { this.acc = 0; this.backWarm(); }
       return;
     }
-    if (this.stage === 0 && this.acc > 8) this.go(1);
+    if (this.stage === 0 && this.acc > 8) { this.acc = 0; this.go(2); }
     else if (this.stage === 1 && this.acc > T) this.go(2);
     else if (this.stage === 1 && this.acc < -40) this.go(0);
     else if (this.stage === 2 && this.acc > T && this.progress(now) >= 1) { this.acc = 0; this.wantJoin(); }
@@ -511,11 +529,14 @@ gl_FragColor=vec4(clamp(col,0.,1.),1.);}
     var cl = function (a, b, x) { return Math.min(1, Math.max(0, (x - a) / (b - a))); };
     var EW = VW / sc, EH = VH / sc;
     if (this.titleEl) { var k0 = cl(0, 0.22, s); this.titleEl.style.opacity = String(1 - k0); this.titleEl.style.filter = 'blur(' + (k0 * 10).toFixed(1) + 'px)'; this.titleEl.style.transform = 'scale(' + (1 + k0 * 0.6).toFixed(3) + ')'; }
-    if (this.introEl) this.introEl.style.opacity = String(1 - cl(0, 0.12, s));
+    if (this.introEl) { var io = 1 - cl(0, 0.12, s); this.introEl.style.opacity = String(io); this.introEl.style.visibility = io < 0.01 ? 'hidden' : 'visible'; }
     if (this.finalEl) {
-      var k = cl(0.86, 1, s);
-      var on = s > 0.93 ? '1' : '0';
-      if (this.finalEl.getAttribute('data-on') !== on) this.finalEl.setAttribute('data-on', on);
+      var leaving = this.tw.to < this.tw.from;
+      var k = leaving ? cl(0.5, 1, s) : cl(0.86, 1, s);
+      var cur = this.finalEl.getAttribute('data-on');
+      var on = leaving ? (s > 0.05 ? cur : '0') : (s > 0.93 ? '1' : '0');
+      if (cur !== on) this.finalEl.setAttribute('data-on', on);
+      this.finalEl.style.filter = (leaving && k < 1) ? 'blur(' + ((1 - k) * 6).toFixed(1) + 'px)' : 'none';
       this.finalEl.style.opacity = String(dive >= 1 ? 0 : k);
       this.finalEl.style.transform = 'translateX(' + (dive * EW * 1.1).toFixed(1) + 'px)';
       this.finalEl.style.pointerEvents = (k > 0.9 && !this.phase && dive === 0) ? 'auto' : 'none';
