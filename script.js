@@ -314,12 +314,13 @@ gl_FragColor=vec4(clamp(col,0.,1.),1.);}
     this.exitEl.addEventListener('click', quickExit);
     window.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') { quickExit(e); return; }
+      self.touching = false;
       if (e.key === 'ArrowDown' || e.key === 'PageDown') { e.preventDefault(); self.input(200); }
       if (e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); self.input(-200); }
     });
-    window.addEventListener('wheel', function (e) { e.preventDefault(); self.touching = false; self.input(e.deltaY); }, { passive: false });
-    window.addEventListener('touchstart', function (e) { self.ty0 = e.touches[0].clientY; self.touching = true; }, { passive: true });
-    window.addEventListener('touchmove', function (e) { if (self.ty0 == null) return; e.preventDefault(); var y = e.touches[0].clientY; self.input((self.ty0 - y) * 2.2); self.ty0 = y; }, { passive: false });
+    window.addEventListener('wheel', function (e) { e.preventDefault(); self.touching = false; if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) self.inputX(e.deltaX); else self.input(e.deltaY); }, { passive: false });
+    window.addEventListener('touchstart', function (e) { self.ty0 = e.touches[0].clientY; self.tx0 = e.touches[0].clientX; self.touching = true; }, { passive: true });
+    window.addEventListener('touchmove', function (e) { if (self.ty0 == null) return; e.preventDefault(); var y = e.touches[0].clientY, x = e.touches[0].clientX; var ddy = self.ty0 - y, ddx = self.tx0 - x; if (Math.abs(ddx) > Math.abs(ddy)) self.inputX(ddx * 2.2); else self.input(ddy * 2.2); self.ty0 = y; self.tx0 = x; }, { passive: false });
     window.addEventListener('touchend', function () { self.ty0 = null; });
     window.addEventListener('pointermove', function (e) { self.tx = (e.clientX / window.innerWidth - 0.5) * 2; self.ty = (e.clientY / window.innerHeight - 0.5) * 2; });
     window.addEventListener('resize', function () { self.layout(); });
@@ -477,11 +478,12 @@ gl_FragColor=vec4(clamp(col,0.,1.),1.);}
     this.lastIn = now;
     this.acc += dy;
     var T = 140;
-    if (this.phase === 'dawn') { if (this.acc < -T) { this.acc = 0; this.backWater(); } return; }
+    if (this.phase === 'dawn') { if (this.acc < -T || (this.touching && this.acc > T)) { this.acc = 0; this.backWater(); } return; }
     if (this.phase === 'water') {
       if (this.view === 'faq') { if (this.acc < -T) { this.acc = 0; this.closeFaq(); } return; }
       if (this.view !== 'info') return;
-      if (this.acc > T) { this.acc = 0; this.doJoin(); } else if (this.acc < -T) { this.acc = 0; this.backWarm(); }
+      if (this.acc > T || (this.touching && this.acc < -T)) { this.acc = 0; this.doJoin(); }
+      else if (!this.touching && this.acc < -T) { this.acc = 0; this.backWarm(); }
       return;
     }
     if (this.stage === 0 && this.acc > 8) { this.acc = 0; this.go(2); }
@@ -491,6 +493,18 @@ gl_FragColor=vec4(clamp(col,0.,1.),1.);}
     else if (this.stage === 2 && this.acc < -160) this.go(0);
   };
 
+  P.inputX = function (dx) {
+    var now = performance.now();
+    if (this.busy(now) || this.swapping) { this.accX = 0; this.quiet = now + 450; return; }
+    if (this.quiet && now < this.quiet) { this.quiet = now + 250; return; }
+    if (this.lock && now < this.lock) return;
+    if (!this.lastInX || now - this.lastInX > 350) this.accX = 0;
+    this.lastInX = now;
+    this.accX = (this.accX || 0) + dx;
+    var T = 140;
+    if (this.phase === 'water' && this.view === 'info' && this.accX > T) { this.accX = 0; this.backWarm(); }
+    else if (!this.phase && this.stage === 2 && this.progress(now) >= 1 && this.accX < -T) { this.accX = 0; this.wantJoin(); }
+  };
   P.loop = function () {
     var self = this;
     var now = performance.now();
