@@ -238,7 +238,7 @@ gl_FragColor=vec4(clamp(col,0.,1.),1.);}
     this.stage = 0; this.tw = { from: 0, to: 0, t0: 0, dur: 1 }; this.acc = 0; this.tx = 0; this.ty = 0; this.cx = 0; this.cy = 0;
     this.A = {}; this.phase = null; this.view = 'info'; this.infoVis = true; this.faqVis = false; this.dripStart = null; this.texOn = false;
     this.reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-    this.mq = window.matchMedia('(max-width: 700px)');
+    this.mq = window.matchMedia('(max-width: 700px), (max-aspect-ratio: 5/6)');
     this.pickStage();
     this.initGL();
     this.bind();
@@ -253,7 +253,7 @@ gl_FragColor=vec4(clamp(col,0.,1.),1.);}
     this.st = document.querySelector(this.mobile ? '.stage-m' : '.stage-d');
     this.SW = this.mobile ? 390 : 1040; this.SH = this.mobile ? 844 : 650;
     var q = (n) => this.st.querySelector('[data-ref="' + n + '"]');
-    this.titleEl = q('Title'); this.introEl = q('Intro'); this.finalEl = q('Final'); this.faqEl = q('Faq'); this.faqInner = q('FaqInner');
+    this.titleEl = document.querySelector('.hero-title'); this.introEl = document.querySelector('.hero-intro'); this.finalEl = q('Final'); this.faqEl = q('Faq'); this.faqInner = q('FaqInner');
     this.infoEl = q('Info'); this.faqBox = q('FaqBox'); this.dawnEl = q('Dawn'); this.backArr = q('BackArr');
     this.B = [q('B0'), q('B1'), q('B2'), q('B3'), q('B4'), q('B5')];
     if (this.phase === 'water' && this.infoVis) this.replay(this.infoEl);
