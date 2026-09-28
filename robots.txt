@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://anna-gura.github.io/Transition-Point/sitemap.xml
+Sitemap: https://transitionpoint.party/sitemap.xml
