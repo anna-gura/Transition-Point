@@ -1,167 +1,257 @@
 <!doctype html>
 <html lang="uk">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'">
-  <meta name="referrer" content="no-referrer">
-  <title>Точка переходу — закрита спільнота для транс-людей</title>
-  <meta name="description" content="Місце, де не треба нічого пояснювати. Закритий україномовний чат підтримки для транс-людей.">
-  <meta name="theme-color" content="#000000">
-  <link rel="canonical" href="https://transitionpoint.party/">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'"
+    />
+    <meta name="referrer" content="no-referrer" />
+    <title>Точка переходу — закрита спільнота для транс-людей</title>
+    <meta
+      name="description"
+      content="Місце, де не треба нічого пояснювати. Закритий україномовний чат підтримки для транс-людей."
+    />
+    <meta name="theme-color" content="#000000" />
+    <link rel="canonical" href="https://transitionpoint.party/" />
 
-  <meta property="og:type" content="website">
-  <meta property="og:locale" content="uk_UA">
-  <meta property="og:site_name" content="Точка переходу">
-  <meta property="og:title" content="Точка переходу">
-  <meta property="og:description" content="Місце, де не треба нічого пояснювати. Закритий україномовний чат підтримки для транс-людей.">
-  <meta property="og:url" content="https://transitionpoint.party/">
-  <meta property="og:image" content="https://transitionpoint.party/og-image.jpg">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Світла куля з тонким сяйвом на чорному тлі й напис «Точка переходу»">
-  <meta name="twitter:card" content="summary_large_image">
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="uk_UA" />
+    <meta property="og:site_name" content="Точка переходу" />
+    <meta property="og:title" content="Точка переходу" />
+    <meta
+      property="og:description"
+      content="Місце, де не треба нічого пояснювати. Закритий україномовний чат підтримки для транс-людей."
+    />
+    <meta property="og:url" content="https://transitionpoint.party/" />
+    <meta property="og:image" content="https://transitionpoint.party/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Світла куля з тонким сяйвом на чорному тлі й напис «Точка переходу»" />
+    <meta name="twitter:card" content="summary_large_image" />
 
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="preload" href="fonts/alegreya.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="fonts/alegreya-sans-400.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/style.css">
-  <script type="module" src="js/main.js"></script>
-</head>
-<body data-tone="night">
-  <canvas class="scene" data-scene aria-hidden="true"></canvas>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href="fonts/alegreya.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="fonts/alegreya-sans-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="css/style.css" />
+    <script type="module" src="js/main.js"></script>
+  </head>
+  <body data-tone="night">
+    <canvas class="scene" data-scene aria-hidden="true"></canvas>
 
-  <a class="quick-exit" href="https://sinoptik.ua/" data-quick-exit>
-    <svg class="quick-exit__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
-    <span class="quick-exit__label">Швидкий вихід</span>
-    <kbd class="quick-exit__key">Esc</kbd>
-  </a>
+    <a class="quick-exit" href="https://sinoptik.ua/" data-quick-exit>
+      <svg class="quick-exit__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" /></svg>
+      <span class="quick-exit__label">Швидкий вихід</span>
+      <kbd class="quick-exit__key">Esc</kbd>
+    </a>
 
-  <main>
-    <!-- 1. Hero: the sphere is drawn by WebGL, the title sits inside it. -->
-    <section class="screen screen--hero" data-screen="hero" aria-labelledby="hero-title">
-      <h1 class="hero__title" id="hero-title" tabindex="-1" data-hero-title data-focus="hero">
-        Точка <em class="hero__title-accent">переходу</em>
-      </h1>
-      <div class="hero__chrome" data-hero-chrome>
-        <p class="hero__label">Закрита спільнота для транс-людей</p>
-        <button class="hero__hint" type="button" data-action="enter">
-          Гортай, щоб увійти
-          <span class="hero__hint-arrow" aria-hidden="true">↓</span>
+    <main>
+      <!-- 1. Hero: the sphere is drawn by WebGL, the title sits inside it. -->
+      <section class="screen screen--hero" data-screen="hero" aria-labelledby="hero-title">
+        <h1 class="hero__title" id="hero-title" tabindex="-1" data-hero-title data-focus="hero">
+          Точка <em class="hero__title-accent">переходу</em>
+        </h1>
+        <div class="hero__chrome" data-hero-chrome>
+          <p class="hero__label">Закрита спільнота для транс-людей</p>
+          <button class="hero__hint" type="button" data-action="enter">
+            Гортай, щоб увійти
+            <span class="hero__hint-arrow" aria-hidden="true">↓</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- 2. Warm room right after entering the light. -->
+      <section class="screen screen--warm" data-screen="warm" aria-labelledby="warm-title">
+        <div class="screen__scroll" data-scrollable>
+          <div class="warm" data-warm-content data-revealed="false">
+            <h2 class="warm__title" id="warm-title" tabindex="-1" data-focus="warm">
+              <span class="reveal reveal--0">Місце,</span> <span class="reveal reveal--1">де</span>
+              <span class="reveal reveal--2">не</span> <span class="reveal reveal--3">треба</span>
+              <span class="reveal reveal--4">нічого</span> <span class="reveal reveal--5">пояснювати.</span>
+            </h2>
+            <p class="warm__text reveal reveal--8">
+              Тут уже є інші. Невеликий закритий чат для транс-людей, де діляться досвідом, підтримують одне одного і
+              просто розмовляють, як удома.
+            </p>
+            <button class="button button--dark reveal reveal--13" type="button" data-action="to-water">
+              А що ще? <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Under water: who we are + questions hidden in a soap bubble. -->
+      <section class="screen screen--water" data-screen="water" aria-labelledby="water-title">
+        <div class="water-info screen__scroll" data-water-info data-revealed="false" data-scrollable>
+          <div class="water-info__text">
+            <p class="eyebrow reveal reveal--0">Точка переходу</p>
+            <h2 class="water-info__title" id="water-title" tabindex="-1" data-focus="water">
+              <span class="reveal reveal--1">Хто</span> <span class="reveal reveal--2">ми</span>
+            </h2>
+            <p class="water-info__lead reveal reveal--4">
+              Закритий чат для транс-людей, які говорять українською. Тут питають і про гормони, і про буденне, діляться
+              тим, що болить і що тішить, і нарешті не пояснюють, хто вони.
+            </p>
+            <button class="button button--glass glass reveal reveal--7" type="button" data-action="to-dawn">
+              <span>Доєднатися</span> <span aria-hidden="true">↑</span>
+            </button>
+          </div>
+          <button
+            class="confidence-bubble reveal reveal--9"
+            type="button"
+            data-action="open-faq"
+            data-confidence-bubble
+          >
+            <span class="confidence-bubble__title">Мені бракує впевненості</span>
+            <span class="confidence-bubble__hint">натисни на бульбашку</span>
+          </button>
+        </div>
+
+        <div class="faq" data-faq data-revealed="false" aria-labelledby="faq-title">
+          <h2 class="visually-hidden" id="faq-title" tabindex="-1" data-focus="faq">А мені можна?</h2>
+          <div class="faq__frame" data-faq-frame>
+            <div class="faq-bubble" data-bubble>
+              <button
+                class="faq-bubble__toggle"
+                type="button"
+                aria-expanded="false"
+                aria-controls="faq-answer-1"
+                data-bubble-toggle
+              >
+                <span class="faq-bubble__question" data-bubble-question
+                  ><span class="reveal reveal--3">А якщо мій перехід ще не почався?</span></span
+                >
+              </button>
+              <p class="faq-bubble__answer" id="faq-answer-1" aria-hidden="true" data-bubble-answer>
+                Ти — це ти, незалежно від гормонів, операцій чи того, як ти виглядаєш. Тут нікому не треба нічого
+                доводити, щоб бути своїм.
+              </p>
+            </div>
+            <div class="faq-bubble" data-bubble>
+              <button
+                class="faq-bubble__toggle"
+                type="button"
+                aria-expanded="false"
+                aria-controls="faq-answer-2"
+                data-bubble-toggle
+              >
+                <span class="faq-bubble__question" data-bubble-question
+                  ><span class="reveal reveal--5">А якщо в мене немає довідки чи діагнозу?</span></span
+                >
+              </button>
+              <p class="faq-bubble__answer" id="faq-answer-2" aria-hidden="true" data-bubble-answer>
+                Щоб знати, хто ти, документ не потрібен. Тут вірять тобі, а не папірцям.
+              </p>
+            </div>
+            <div class="faq-bubble" data-bubble>
+              <button
+                class="faq-bubble__toggle"
+                type="button"
+                aria-expanded="false"
+                aria-controls="faq-answer-3"
+                data-bubble-toggle
+              >
+                <span class="faq-bubble__question" data-bubble-question
+                  ><span class="reveal reveal--7">Хтось дізнається, що я тут?</span></span
+                >
+              </button>
+              <p class="faq-bubble__answer" id="faq-answer-3" aria-hidden="true" data-bubble-answer>
+                Чат закритий, і все сказане в ньому лишається всередині: жодних скріншотів чи імен назовні. Можна бути
+                під будь-яким ім'ям.
+              </p>
+            </div>
+            <div class="faq-bubble" data-bubble>
+              <button
+                class="faq-bubble__toggle"
+                type="button"
+                aria-expanded="false"
+                aria-controls="faq-answer-4"
+                data-bubble-toggle
+              >
+                <span class="faq-bubble__question" data-bubble-question
+                  ><span class="reveal reveal--9">А якщо я ще не знаю напевно, хто я?</span></span
+                >
+              </button>
+              <p class="faq-bubble__answer" id="faq-answer-4" aria-hidden="true" data-bubble-answer>
+                Сумніви — теж частина шляху. Тут можна питати, думати вголос і шукати себе без поспіху й без осуду.
+              </p>
+            </div>
+            <button
+              class="faq__close reveal reveal--1"
+              type="button"
+              data-action="close-faq"
+              aria-label="Закрити питання"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6 18 18M18 6 6 18" /></svg>
+            </button>
+          </div>
+        </div>
+
+        <button
+          class="back-button back-button--right"
+          type="button"
+          data-action="to-warm"
+          aria-label="Повернутися назад"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
         </button>
-      </div>
-    </section>
+      </section>
 
-    <!-- 2. Warm room right after entering the light. -->
-    <section class="screen screen--warm" data-screen="warm" aria-labelledby="warm-title">
-      <div class="screen__scroll" data-scrollable>
-        <div class="warm" data-warm-content data-revealed="false">
-          <h2 class="warm__title" id="warm-title" tabindex="-1" data-focus="warm">
-            <span class="reveal reveal--0">Місце,</span> <span class="reveal reveal--1">де</span> <span class="reveal reveal--2">не</span> <span class="reveal reveal--3">треба</span> <span class="reveal reveal--4">нічого</span> <span class="reveal reveal--5">пояснювати.</span>
-          </h2>
-          <p class="warm__text reveal reveal--8">
-            Тут уже є інші. Невеликий закритий чат для транс-людей, де діляться досвідом, підтримують одне одного і просто розмовляють, як удома.
-          </p>
-          <button class="button button--dark reveal reveal--13" type="button" data-action="to-water">
-            А що ще? <span aria-hidden="true">→</span>
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- 3. Under water: who we are + questions hidden in a soap bubble. -->
-    <section class="screen screen--water" data-screen="water" aria-labelledby="water-title">
-      <div class="water-info screen__scroll" data-water-info data-revealed="false" data-scrollable>
-        <div class="water-info__text">
-          <p class="eyebrow reveal reveal--0">Точка переходу</p>
-          <h2 class="water-info__title" id="water-title" tabindex="-1" data-focus="water">
-            <span class="reveal reveal--1">Хто</span> <span class="reveal reveal--2">ми</span>
-          </h2>
-          <p class="water-info__lead reveal reveal--4">
-            Закритий чат для транс-людей, які говорять українською. Тут питають і про гормони, і про буденне, діляться тим, що болить і що тішить, і нарешті не пояснюють, хто вони.
-          </p>
-          <button class="button button--glass glass reveal reveal--7" type="button" data-action="to-dawn">
-            <span>Доєднатися</span> <span aria-hidden="true">↑</span>
-          </button>
-        </div>
-        <button class="confidence-bubble reveal reveal--9" type="button" data-action="open-faq" data-confidence-bubble>
-          <span class="confidence-bubble__title">Мені бракує впевненості</span>
-          <span class="confidence-bubble__hint">натисни на бульбашку</span>
-        </button>
-      </div>
-
-      <div class="faq" data-faq data-revealed="false" aria-labelledby="faq-title">
-        <h2 class="visually-hidden" id="faq-title" tabindex="-1" data-focus="faq">А мені можна?</h2>
-        <div class="faq__frame" data-faq-frame>
-          <div class="faq-bubble" data-bubble>
-            <button class="faq-bubble__toggle" type="button" aria-expanded="false" aria-controls="faq-answer-1" data-bubble-toggle>
-              <span class="faq-bubble__question" data-bubble-question><span class="reveal reveal--3">А якщо мій перехід ще не почався?</span></span>
-            </button>
-            <p class="faq-bubble__answer" id="faq-answer-1" aria-hidden="true" data-bubble-answer>Ти — це ти, незалежно від гормонів, операцій чи того, як ти виглядаєш. Тут нікому не треба нічого доводити, щоб бути своїм.</p>
-          </div>
-          <div class="faq-bubble" data-bubble>
-            <button class="faq-bubble__toggle" type="button" aria-expanded="false" aria-controls="faq-answer-2" data-bubble-toggle>
-              <span class="faq-bubble__question" data-bubble-question><span class="reveal reveal--5">А якщо в мене немає довідки чи діагнозу?</span></span>
-            </button>
-            <p class="faq-bubble__answer" id="faq-answer-2" aria-hidden="true" data-bubble-answer>Щоб знати, хто ти, документ не потрібен. Тут вірять тобі, а не папірцям.</p>
-          </div>
-          <div class="faq-bubble" data-bubble>
-            <button class="faq-bubble__toggle" type="button" aria-expanded="false" aria-controls="faq-answer-3" data-bubble-toggle>
-              <span class="faq-bubble__question" data-bubble-question><span class="reveal reveal--7">Хтось дізнається, що я тут?</span></span>
-            </button>
-            <p class="faq-bubble__answer" id="faq-answer-3" aria-hidden="true" data-bubble-answer>Чат закритий, і все сказане в ньому лишається всередині: жодних скріншотів чи імен назовні. Можна бути під будь-яким ім'ям.</p>
-          </div>
-          <div class="faq-bubble" data-bubble>
-            <button class="faq-bubble__toggle" type="button" aria-expanded="false" aria-controls="faq-answer-4" data-bubble-toggle>
-              <span class="faq-bubble__question" data-bubble-question><span class="reveal reveal--9">А якщо я ще не знаю напевно, хто я?</span></span>
-            </button>
-            <p class="faq-bubble__answer" id="faq-answer-4" aria-hidden="true" data-bubble-answer>Сумніви — теж частина шляху. Тут можна питати, думати вголос і шукати себе без поспіху й без осуду.</p>
-          </div>
-          <button class="faq__close reveal reveal--1" type="button" data-action="close-faq" aria-label="Закрити питання">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6 18 18M18 6 6 18"/></svg>
-          </button>
-        </div>
-      </div>
-
-      <button class="back-button back-button--right" type="button" data-action="to-warm" aria-label="Повернутися назад">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
-      </button>
-    </section>
-
-    <!-- 4. Dawn: how to join. -->
-    <section class="screen screen--dawn" data-screen="dawn" aria-labelledby="dawn-title">
-      <div class="screen__scroll" data-scrollable>
-        <div class="dawn">
-          <h2 class="visually-hidden" id="dawn-title" tabindex="-1" data-focus="dawn">Як доєднатися</h2>
-          <div class="founder">
-            <img class="founder__photo" src="ilona.jpg" width="324" height="324" alt="Ілона Ханько">
-            <div>
-              <p class="founder__name">Ілона Ханько</p>
-              <p class="founder__role">ендокринолог</p>
+      <!-- 4. Dawn: how to join. -->
+      <section class="screen screen--dawn" data-screen="dawn" aria-labelledby="dawn-title">
+        <div class="screen__scroll" data-scrollable>
+          <div class="dawn">
+            <h2 class="visually-hidden" id="dawn-title" tabindex="-1" data-focus="dawn">Як доєднатися</h2>
+            <div class="founder">
+              <img class="founder__photo" src="ilona.jpg" width="324" height="324" alt="Ілона Ханько" />
+              <div>
+                <p class="founder__name">Ілона Ханько</p>
+                <p class="founder__role">ендокринолог</p>
+              </div>
+            </div>
+            <p class="dawn__lead">
+              Щоб доєднатися, напиши Ілоні в Telegram. Вона коротко розповість, як усе влаштовано, і додасть тебе в чат.
+              Вхід одноразово платний.
+            </p>
+            <p class="dawn__text dawn__text--full">
+              «Точка переходу» з'явилася, щоб у транс-людей було своє тепле місце, де можна говорити без страху й без
+              пояснень. Ми онлайн, бо українці сьогодні живуть у різних містах і країнах, і підтримка не має залежати
+              від того, де ти зараз. Тут тримаються одне за одного, діляться досвідом і просто бувають поруч.
+            </p>
+            <p class="dawn__text dawn__text--compact">
+              Ми онлайн, бо українці сьогодні живуть у різних містах і країнах. Тут підтримують одне одного, діляться
+              досвідом і просто бувають поруч.
+            </p>
+            <div class="dawn__cta">
+              <a class="liquid-button" href="https://t.me/Endocrinology_onlineClinic_bot" rel="noopener noreferrer">
+                <span class="liquid-button__glow" aria-hidden="true"></span>
+                <span class="liquid-button__glass" aria-hidden="true"></span>
+                <svg class="liquid-button__icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M21 4 3 11l7 2.5L12.5 20.5zM21 4 10 13.5" />
+                </svg>
+                <span>Написати Ілоні</span>
+              </a>
+              <p class="dawn__caption">відкриється Telegram</p>
             </div>
           </div>
-          <p class="dawn__lead">Щоб доєднатися, напиши Ілоні в Telegram. Вона коротко розповість, як усе влаштовано, і додасть тебе в чат. Вхід одноразово платний.</p>
-          <p class="dawn__text dawn__text--full">«Точка переходу» з'явилася, щоб у транс-людей було своє тепле місце, де можна говорити без страху й без пояснень. Ми онлайн, бо українці сьогодні живуть у різних містах і країнах, і підтримка не має залежати від того, де ти зараз. Тут тримаються одне за одного, діляться досвідом і просто бувають поруч.</p>
-          <p class="dawn__text dawn__text--compact">Ми онлайн, бо українці сьогодні живуть у різних містах і країнах. Тут підтримують одне одного, діляться досвідом і просто бувають поруч.</p>
-          <div class="dawn__cta">
-            <a class="liquid-button" href="https://t.me/Endocrinology_onlineClinic_bot" rel="noopener noreferrer">
-              <span class="liquid-button__glow" aria-hidden="true"></span>
-              <span class="liquid-button__glass" aria-hidden="true"></span>
-              <svg class="liquid-button__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 4 3 11l7 2.5L12.5 20.5zM21 4 10 13.5"/></svg>
-              <span>Написати Ілоні</span>
-            </a>
-            <p class="dawn__caption">відкриється Telegram</p>
-          </div>
         </div>
-      </div>
-      <button class="back-button back-button--bottom" type="button" data-action="back-to-water" aria-label="Повернутися під воду">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg>
-      </button>
-    </section>
-  </main>
+        <button
+          class="back-button back-button--bottom"
+          type="button"
+          data-action="back-to-water"
+          aria-label="Повернутися під воду"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7" /></svg>
+        </button>
+      </section>
+    </main>
 
-  <noscript>
-    <p class="noscript">Для цієї сторінки потрібен JavaScript. Щоб доєднатися до «Точки переходу», напиши Ілоні в Telegram: <a href="https://t.me/Endocrinology_onlineClinic_bot">t.me/Endocrinology_onlineClinic_bot</a>.</p>
-  </noscript>
-</body>
+    <noscript>
+      <p class="noscript">
+        Для цієї сторінки потрібен JavaScript. Щоб доєднатися до «Точки переходу», напиши Ілоні в Telegram:
+        <a href="https://t.me/Endocrinology_onlineClinic_bot">t.me/Endocrinology_onlineClinic_bot</a>.
+      </p>
+    </noscript>
+  </body>
 </html>

@@ -46,7 +46,10 @@ export class BubbleField {
     this.layouts = [base.map((p) => ({ ...p, r: closed / 2 }))];
     base.forEach((_, index) => this.layouts.push(makeRoom(base, index, closed, open, bounds)));
 
-    this.items.forEach((item) => { item.current = null; item.rendered = false; });
+    this.items.forEach((item) => {
+      item.current = null;
+      item.rendered = false;
+    });
   }
 
   /** Layout for the current selection: index 0 = nothing open. */
@@ -69,7 +72,10 @@ export class BubbleField {
   /** Closes everything instantly (used when the field is hidden). */
   reset() {
     this.select(-1);
-    this.items.forEach((item) => { item.current = null; item.rendered = false; });
+    this.items.forEach((item) => {
+      item.current = null;
+      item.rendered = false;
+    });
   }
 
   /**
@@ -167,9 +173,12 @@ function pushApart(a, b, distance, both) {
   const ux = dx / length;
   const uy = dy / length;
   if (both) {
-    a.x -= ux * overlap / 2; a.y -= uy * overlap / 2;
-    b.x += ux * overlap / 2; b.y += uy * overlap / 2;
+    a.x -= (ux * overlap) / 2;
+    a.y -= (uy * overlap) / 2;
+    b.x += (ux * overlap) / 2;
+    b.y += (uy * overlap) / 2;
   } else {
-    b.x += ux * overlap; b.y += uy * overlap;
+    b.x += ux * overlap;
+    b.y += uy * overlap;
   }
 }

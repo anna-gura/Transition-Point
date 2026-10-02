@@ -2,8 +2,21 @@ import { VERTEX_SHADER, FRAGMENT_SHADER } from './shaders.js';
 import { RENDER } from './config.js';
 
 const UNIFORMS = [
-  'uResolution', 'uTime', 'uTilt', 'uSphereScale', 'uPortal', 'uDive', 'uRise', 'uDust',
-  'uDripTime', 'uRiseDuration', 'uDripColumns', 'uHasTexture', 'uRefractWater', 'uTexture', 'uBubbles',
+  'uResolution',
+  'uTime',
+  'uTilt',
+  'uSphereScale',
+  'uPortal',
+  'uDive',
+  'uRise',
+  'uDust',
+  'uDripTime',
+  'uRiseDuration',
+  'uDripColumns',
+  'uHasTexture',
+  'uRefractWater',
+  'uTexture',
+  'uBubbles',
 ];
 
 /**
@@ -38,8 +51,9 @@ export class SceneRenderer {
 
   /** @returns {boolean} false when WebGL is unavailable */
   init() {
-    const gl = this.canvas.getContext('webgl', { antialias: false, alpha: false })
-      || this.canvas.getContext('experimental-webgl');
+    const gl =
+      this.canvas.getContext('webgl', { antialias: false, alpha: false }) ||
+      this.canvas.getContext('experimental-webgl');
     if (!gl) return false;
 
     const program = gl.createProgram();

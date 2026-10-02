@@ -1,0 +1,7 @@
+fonts/
+*.woff2
+*.jpg
+*.svg
+node_modules/
+_headers
+.well-known/

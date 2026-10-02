@@ -1,9 +1,27 @@
-@font-face { font-family: 'Alegreya'; src: url('../fonts/alegreya.woff2') format('woff2'); font-weight: 400 900; font-display: swap; }
-@font-face { font-family: 'Alegreya Sans'; src: url('../fonts/alegreya-sans-400.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+@font-face {
+  font-family: 'Alegreya';
+  src: url('../fonts/alegreya.woff2') format('woff2');
+  font-weight: 400 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Alegreya Sans';
+  src: url('../fonts/alegreya-sans-400.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
 
-*, *::before, *::after { box-sizing: border-box; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
-html, body { height: 100%; margin: 0; }
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
 
 body {
   display: grid;
@@ -15,7 +33,24 @@ body {
   text-align: center;
 }
 
-.not-found__code { margin: 0; font-size: 0.875rem; letter-spacing: 0.2em; opacity: 0.6; }
-.not-found__title { margin: 12px 0 28px; font: 500 clamp(2rem, 6vw, 3.5rem) / 1.1 'Alegreya', Georgia, serif; }
-.not-found__link { color: inherit; text-underline-offset: 6px; }
-.not-found__link:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+.not-found__code {
+  margin: 0;
+  font-size: 0.875rem;
+  letter-spacing: 0.2em;
+  opacity: 0.6;
+}
+.not-found__title {
+  margin: 12px 0 28px;
+  font:
+    500 clamp(2rem, 6vw, 3.5rem) / 1.1 'Alegreya',
+    Georgia,
+    serif;
+}
+.not-found__link {
+  color: inherit;
+  text-underline-offset: 6px;
+}
+.not-found__link:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}

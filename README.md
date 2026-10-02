@@ -33,6 +33,8 @@ js/bubbles.js       розкладка й анімація бульбашок з
 js/rasterize.js     малює видимий текст у canvas для ефекту розсипання
 js/tween.js         анімаційні примітиви
 js/config.js        усі тривалості, пороги й налаштування в одному місці
+_headers            заголовки безпеки й кешування для Cloudflare
+.well-known/security.txt  куди повідомляти про вразливості (RFC 9116)
 fonts/              Alegreya та Alegreya Sans (SIL OFL), латиниця й кирилиця
 og-image.jpg        прев'ю для Telegram і соцмереж
 ```
@@ -47,12 +49,25 @@ python -m http.server 8000
 
 і відкрити <http://localhost:8000>. Або розширення Live Server у VS Code.
 
+## Перевірка коду
+
+Потрібен Node.js 18+. Один раз: `npm install`. Далі:
+
+```bash
+npm run lint          # ESLint
+npm run format        # Prettier форматує всі файли
+npm run check         # лінтер + перевірка форматування, перед кожним комітом
+```
+
+Сам сайт від Node.js не залежить: це лише інструменти для розробки.
+
 ## Публікація
 
 Сайт статичний, збірка не потрібна.
 
 - **GitHub Pages:** Settings → Pages → Deploy from a branch → `main`, папка `/ (root)`. Файл `CNAME` вже містить домен `transitionpoint.party`.
-- **Cloudflare Pages:** підключити репозиторій, команду збірки лишити порожньою, вихідна папка — корінь.
+- **Cloudflare (Workers static assets або Pages):** підключити репозиторій без команди збірки, вихідна папка — корінь. Файл `_headers` Cloudflare застосує автоматично.
+- **Ручне завантаження в Cloudflare:** заливати лише файли сайту: `index.html`, `404.html`, `_headers`, `.well-known/`, `css/`, `js/`, `fonts/`, `favicon.svg`, `ilona.jpg`, `og-image.jpg`, `robots.txt`, `sitemap.xml`. Без `node_modules/`, `package*.json`, конфігів інструментів, `README.md`, `CNAME` і `.git`.
 
 ## Що де змінювати
 
@@ -64,7 +79,9 @@ python -m http.server 8000
 ## Приватність і безпека
 
 - Жодних трекерів, аналітики, cookies чи зовнішніх запитів: шрифти й усі ресурси лежать у репозиторії.
-- Content-Security-Policy дозволяє завантажувати лише власні файли сайту.
+- Content-Security-Policy дозволяє завантажувати лише власні файли сайту й забороняє вбудовувати сайт у чужі сторінки (`frame-ancestors 'none'`).
+- Заголовки з `_headers`: HSTS, `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Permissions-Policy` (вимкнені камера, мікрофон, геолокація тощо), `Cross-Origin-Opener-Policy`. На GitHub Pages працює лише CSP з `<meta>`.
+- `/.well-known/security.txt` пояснює, як повідомити про вразливість.
 - `referrer: no-referrer`, тож переходи з сайту не розкривають, звідки прийшла людина.
 - Швидкий вихід (кнопка або Esc) замінює сторінку в історії через `location.replace`, тому «Назад» на неї не повертає.
 

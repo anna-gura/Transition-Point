@@ -28,8 +28,8 @@ uniform float uTime;           // seconds
 uniform vec2  uTilt;           // pointer tilt of the accretion disk, -1..1
 uniform float uSphereScale;    // sphere radius as a fraction of min(width, height)
 uniform float uPortal;         // 0 = hero, 1 = fully inside the light
-uniform float uDive;           // 0 = warm room, 1 = under water
-uniform float uRise;           // 0 = under water, 1 = dawn sky
+uniform float uDive;           // 0 = warm room, 1 = under water (edge travels -0.35 → 1.35, see LAYERS.diveEdge)
+uniform float uRise;           // 0 = under water, 1 = dawn sky (text travels 0.9 of the height, see LAYERS.riseTravel)
 uniform float uDust;           // 0..1 progress of the text dissolve
 uniform float uDripTime;       // seconds since surfacing started, < 0 when inactive
 uniform float uRiseDuration;   // seconds

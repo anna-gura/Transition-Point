@@ -1,4 +1,4 @@
-import { COMPACT_LAYOUT_QUERY, DURATION, INPUT, RENDER, BUBBLES } from './config.js';
+import { COMPACT_LAYOUT_QUERY, DURATION, TIMELINE, LAYERS, INPUT, RENDER, BUBBLES } from './config.js';
 import { Tween, Scheduler, ease } from './tween.js';
 import { SceneRenderer } from './renderer.js';
 import { GestureInput } from './input.js';
@@ -32,8 +32,12 @@ export class App {
     this.busyUntil = 0;
     this.scheduler = new Scheduler();
     this.tweens = {
-      portal: new Tween(0), dive: new Tween(0), rise: new Tween(0),
-      dust: new Tween(0), grow: new Tween(0), appear: new Tween(0),
+      portal: new Tween(0),
+      dive: new Tween(0),
+      rise: new Tween(0),
+      dust: new Tween(0),
+      grow: new Tween(0),
+      appear: new Tween(0),
     };
     this.portalForward = true;
     this.dripStart = null;
@@ -52,7 +56,10 @@ export class App {
     this.renderer = new SceneRenderer(this.dom.canvas);
     if (!this.renderer.init()) document.documentElement.classList.add('no-webgl');
     this.bubbles = new BubbleField(this.dom.faqFrame, this.dom.faqClose);
-    this.input = new GestureInput((intent) => this.handleIntent(intent), () => this.isBusy());
+    this.input = new GestureInput(
+      (intent) => this.handleIntent(intent),
+      () => this.isBusy(),
+    );
   }
 
   start() {
@@ -129,17 +136,18 @@ export class App {
   }
 
   frame(now) {
-    const dt = Math.min((now - this.lastFrame) / 1000, 0.1);
+    const dt = Math.min((now - this.lastFrame) / 1000, RENDER.maxFrameStep);
     this.lastFrame = now;
     this.scheduler.run(now);
 
     const t = this.values;
     for (const key in this.tweens) t[key] = this.tweens[key].value(now);
     this.adaptQuality(dt * 1000);
-    const ambientTime = this.reducedMotion.matches ? 20 : (now - this.startTime) / 1000;
+    const ambientTime = this.reducedMotion.matches ? RENDER.frozenTime : (now - this.startTime) / 1000;
 
+    const sway = RENDER.autoTilt;
     const follow = this.compactQuery.matches
-      ? [Math.sin(ambientTime * 0.15) * 0.6, Math.cos(ambientTime * 0.11) * 0.6]
+      ? [Math.sin(ambientTime * sway.speedX) * sway.amplitude, Math.cos(ambientTime * sway.speedY) * sway.amplitude]
       : this.pointer;
     this.tilt = this.tilt.map((v, i) => v + (follow[i] - v) * RENDER.tiltFollow);
 
@@ -168,28 +176,39 @@ export class App {
     const { hero, warm, water, dawn } = this.dom.screens;
 
     // Hero title and hints fade as we fall into the light.
-    const heroFade = range(0, 0.22, t.portal);
+    const heroFade = range(0, LAYERS.heroTitleFadeEnd, t.portal);
     this.setStyle(this.dom.heroTitle, 'opacity', String(1 - heroFade));
-    this.setStyle(this.dom.heroTitle, 'filter', heroFade ? `blur(${(heroFade * 10).toFixed(1)}px)` : 'none');
-    this.setStyle(this.dom.heroTitle, 'transform', `scale(${(1 + heroFade * 0.6).toFixed(3)})`);
-    const hintOpacity = 1 - range(0, 0.12, t.portal);
+    this.setStyle(
+      this.dom.heroTitle,
+      'filter',
+      heroFade ? `blur(${(heroFade * LAYERS.heroTitleBlur).toFixed(1)}px)` : 'none',
+    );
+    this.setStyle(this.dom.heroTitle, 'transform', `scale(${(1 + heroFade * LAYERS.heroTitleGrow).toFixed(3)})`);
+    const hintOpacity = 1 - range(0, LAYERS.heroHintFadeEnd, t.portal);
     this.setStyle(this.dom.heroChrome, 'opacity', String(hintOpacity));
     this.setStyle(hero, 'visibility', hintOpacity <= 0 && heroFade >= 1 ? 'hidden' : 'visible');
 
     // Warm room: words assemble on the way in and simply fade on the way out.
-    const warmVisibility = this.portalForward ? range(0.86, 1, t.portal) : range(0.5, 1, t.portal);
+    const warmVisibility = range(...(this.portalForward ? LAYERS.warmFadeIn : LAYERS.warmFadeOut), t.portal);
     const revealed = this.portalForward
-      ? t.portal > 0.93
-      : t.portal > 0.05 && this.dom.warmContent.dataset.revealed === 'true';
+      ? t.portal > LAYERS.warmRevealAt
+      : t.portal > LAYERS.warmHideAt && this.dom.warmContent.dataset.revealed === 'true';
     this.setReveal(this.dom.warmContent, revealed);
     this.setStyle(warm, 'opacity', String(t.dive >= 1 ? 0 : warmVisibility));
-    this.setStyle(warm, 'filter', !this.portalForward && warmVisibility < 1 ? `blur(${((1 - warmVisibility) * 6).toFixed(1)}px)` : 'none');
-    this.setStyle(warm, 'transform', `translate3d(${(t.dive * width * 1.1).toFixed(1)}px, 0, 0)`);
+    this.setStyle(
+      warm,
+      'filter',
+      !this.portalForward && warmVisibility < 1
+        ? `blur(${((1 - warmVisibility) * LAYERS.warmLeaveBlur).toFixed(1)}px)`
+        : 'none',
+    );
+    this.setStyle(warm, 'transform', `translate3d(${(t.dive * width * LAYERS.warmExitDistance).toFixed(1)}px, 0, 0)`);
     this.setStyle(warm, 'visibility', warmVisibility <= 0 || t.dive >= 1 ? 'hidden' : 'visible');
 
     // Water slides in with the vertical "water edge" and sinks while surfacing.
-    const edge = -0.35 + 1.7 * t.dive;
-    const offset = { x: (edge - 1.35) * width, y: t.rise * height * 0.9 };
+    const { start, end } = LAYERS.diveEdge;
+    const edge = start + (end - start) * t.dive;
+    const offset = { x: (edge - end) * width, y: t.rise * height * LAYERS.riseTravel };
     const waterShown = t.dive > 0 && t.rise < 1;
     this.setStyle(water, 'visibility', waterShown ? 'visible' : 'hidden');
     this.setStyle(water, 'transform', `translate3d(${offset.x.toFixed(1)}px, ${offset.y.toFixed(1)}px, 0)`);
@@ -200,18 +219,23 @@ export class App {
     if (water.dataset.back !== back) water.dataset.back = back;
 
     // Dawn drops in from above.
-    const dawnOpacity = range(0.45, 0.9, t.rise);
-    const dripFade = this.dripStart === null ? 1 : range(0, this.duration(DURATION.rise) + 1.2, (performance.now() - this.dripStart) / 1000);
+    const dawnOpacity = range(...LAYERS.dawnFadeIn, t.rise);
+    const dripLength = this.duration(DURATION.rise) + TIMELINE.dripAfterRise;
+    const dripFade = this.dripStart === null ? 1 : range(0, dripLength, (performance.now() - this.dripStart) / 1000);
     this.setStyle(dawn, 'visibility', t.rise > 0 ? 'visible' : 'hidden');
     this.setStyle(dawn, 'opacity', String(dawnOpacity));
-    this.setStyle(dawn, 'transform', `translate3d(0, ${(-(1 - t.rise) * height * 0.6).toFixed(1)}px, 0)`);
-    this.setStyle(dawn, 'filter', dripFade < 1 ? `blur(${((1 - dripFade) * 2.5).toFixed(2)}px)` : 'none');
+    this.setStyle(dawn, 'transform', `translate3d(0, ${(-(1 - t.rise) * height * LAYERS.dawnDrop).toFixed(1)}px, 0)`);
+    this.setStyle(
+      dawn,
+      'filter',
+      dripFade < 1 ? `blur(${((1 - dripFade) * LAYERS.dawnDripBlur).toFixed(2)}px)` : 'none',
+    );
 
     // Colour of the always-visible quick exit link follows the background.
     let tone = 'night';
-    if (t.rise > 0.5) tone = 'dawn';
-    else if (t.dive > 0.5) tone = 'water';
-    else if (t.portal > 0.62) tone = 'warm';
+    if (t.rise > LAYERS.tone.dawn) tone = 'dawn';
+    else if (t.dive > LAYERS.tone.water) tone = 'water';
+    else if (t.portal > LAYERS.tone.warm) tone = 'warm';
     if (document.body.dataset.tone !== tone) document.body.dataset.tone = tone;
 
     return offset;
@@ -227,15 +251,22 @@ export class App {
     const full = Math.hypot(width, height) * BUBBLES.fullScreenFactor;
     const x = anchor.x + offset.x;
     const y = anchor.y + offset.y;
-    data.set([x + (width / 2 - x) * t.grow, y + (height / 2 - y) * t.grow, anchor.r + (full - anchor.r) * t.grow, 1], 0);
+    data.set(
+      [x + (width / 2 - x) * t.grow, y + (height / 2 - y) * t.grow, anchor.r + (full - anchor.r) * t.grow, 1],
+      0,
+    );
 
     const origin = this.bubbleOrigin;
+    const appearScale = LAYERS.bubbleAppearScale + (1 - LAYERS.bubbleAppearScale) * t.appear;
     this.bubbles.forEachCircle((circle, index) => {
-      data.set([circle.x + origin.x + offset.x, circle.y + origin.y + offset.y, circle.r * (0.35 + 0.65 * t.appear), t.appear], (index + 1) * 4);
+      data.set(
+        [circle.x + origin.x + offset.x, circle.y + origin.y + offset.y, circle.r * appearScale, t.appear],
+        (index + 1) * 4,
+      );
     });
 
     const close = this.closeAnchor;
-    data.set([close.x + offset.x, close.y + offset.y, close.r * (0.35 + 0.65 * t.appear), t.appear], 20);
+    data.set([close.x + offset.x, close.y + offset.y, close.r * appearScale, t.appear], 20);
     return data;
   }
 
@@ -247,7 +278,7 @@ export class App {
   adaptQuality(frameMs) {
     const q = this.quality;
     const cfg = RENDER.quality;
-    q.average += (frameMs - q.average) * 0.1;
+    q.average += (frameMs - q.average) * cfg.smoothing;
     q.slow = q.average > cfg.slowFrameMs ? q.slow + 1 : 0;
     q.fast = q.average < cfg.fastFrameMs ? q.fast + 1 : 0;
 
@@ -324,7 +355,7 @@ export class App {
     this.faqVisible = false;
     this.setReveal(this.dom.waterInfo, false);
     this.animate('dive', 0, 1, DURATION.dive);
-    this.after(DURATION.dive * 0.45, () => this.setReveal(this.dom.waterInfo, true, true));
+    this.after(TIMELINE.revealWaterInfo, () => this.setReveal(this.dom.waterInfo, true, true));
     this.go('water');
   }
 
@@ -338,28 +369,28 @@ export class App {
     if (this.screen !== 'water' || this.isBusy()) return;
     this.dissolve(this.dom.waterInfo, DURATION.dissolve);
     this.infoVisible = false;
-    this.animate('grow', 0, 1, DURATION.bubbleGrow, 0.15);
-    this.after(1.5, () => {
+    this.animate('grow', 0, 1, DURATION.bubbleGrow, TIMELINE.growDelay);
+    this.after(TIMELINE.showQuestions, () => {
       this.faqVisible = true;
       this.setReveal(this.dom.faqField, true, true);
       this.animate('appear', 0, 1, DURATION.bubblesAppear);
     });
-    this.after(2.3, () => this.endDissolve());
+    this.after(TIMELINE.openFaqDone, () => this.endDissolve());
     this.go('faq');
   }
 
   closeFaq() {
     if (this.screen !== 'faq' || this.isBusy()) return;
-    this.dissolve(this.dom.faqField, 1.5);
+    this.dissolve(this.dom.faqField, TIMELINE.closeFaqDissolve);
     this.faqVisible = false;
-    this.animate('appear', 1, 0, DURATION.bubblesHide, 0.25);
-    this.animate('grow', 1, 0, DURATION.bubbleShrink, 0.8);
-    this.after(2.4, () => {
+    this.animate('appear', 1, 0, DURATION.bubblesHide, TIMELINE.hideQuestionsDelay);
+    this.animate('grow', 1, 0, DURATION.bubbleShrink, TIMELINE.shrinkDelay);
+    this.after(TIMELINE.showWaterInfo, () => {
       this.bubbles.reset();
       this.infoVisible = true;
       this.setReveal(this.dom.waterInfo, true, true);
     });
-    this.after(2.8, () => this.endDissolve());
+    this.after(TIMELINE.closeFaqDone, () => this.endDissolve());
     this.go('water');
   }
 
@@ -367,8 +398,8 @@ export class App {
     if (this.screen !== 'water' || this.isBusy()) return;
     this.dissolve(this.dom.waterInfo, DURATION.dissolveJoin);
     this.infoVisible = false;
-    this.animate('rise', 0, 1, DURATION.rise, 0.5);
-    this.dripStart = performance.now() + (this.reducedMotion.matches ? 0 : 500);
+    this.animate('rise', 0, 1, DURATION.rise, TIMELINE.riseDelay);
+    this.dripStart = performance.now() + (this.reducedMotion.matches ? 0 : TIMELINE.riseDelay * 1000);
     this.go('dawn');
   }
 
@@ -377,8 +408,8 @@ export class App {
     this.dripStart = null;
     this.animate('rise', 1, 0, DURATION.unrise);
     // The texture of the dissolved text is still loaded, so it reassembles in reverse.
-    this.animate('dust', 1, 0, DURATION.reassemble, 0.7);
-    this.after(2.55, () => {
+    this.animate('dust', 1, 0, DURATION.reassemble, TIMELINE.reassembleDelay);
+    this.after(TIMELINE.sinkBackDone, () => {
       this.infoVisible = true;
       this.endDissolve();
     });

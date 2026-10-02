@@ -32,7 +32,9 @@ export class GestureInput {
     target.addEventListener('wheel', (event) => this.handleWheel(event), { passive: false });
     target.addEventListener('touchstart', (event) => this.handleTouchStart(event), { passive: true });
     target.addEventListener('touchmove', (event) => this.handleTouchMove(event), { passive: false });
-    target.addEventListener('touchend', () => { this.touchPoint = null; });
+    target.addEventListener('touchend', () => {
+      this.touchPoint = null;
+    });
     target.addEventListener('keydown', (event) => this.handleKey(event));
   }
 

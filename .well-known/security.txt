@@ -1,0 +1,5 @@
+# Report a security issue with this website.
+Contact: https://github.com/anna-gura/Transition-Point/security/advisories/new
+Expires: 2027-10-01T00:00:00.000Z
+Preferred-Languages: uk, en
+Canonical: https://transitionpoint.party/.well-known/security.txt
