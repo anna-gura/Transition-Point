@@ -34,47 +34,11 @@ js/rasterize.js     малює видимий текст у canvas для ефе
 js/tween.js         анімаційні примітиви
 js/config.js        усі тривалості, пороги й налаштування в одному місці
 _headers            заголовки безпеки й кешування для Cloudflare
+package.json        ESLint і Prettier: npm run check
 .well-known/security.txt  куди повідомляти про вразливості (RFC 9116)
 fonts/              Alegreya та Alegreya Sans (SIL OFL), латиниця й кирилиця
 og-image.jpg        прев'ю для Telegram і соцмереж
 ```
-
-## Запуск локально
-
-Скрипти підключені як ES-модулі, тому `index.html` не відкриється подвійним кліком. Потрібен будь-який локальний сервер у папці проєкту, наприклад:
-
-```bash
-python -m http.server 8000
-```
-
-і відкрити <http://localhost:8000>. Або розширення Live Server у VS Code.
-
-## Перевірка коду
-
-Потрібен Node.js 18+. Один раз: `npm install`. Далі:
-
-```bash
-npm run lint          # ESLint
-npm run format        # Prettier форматує всі файли
-npm run check         # лінтер + перевірка форматування, перед кожним комітом
-```
-
-Сам сайт від Node.js не залежить: це лише інструменти для розробки.
-
-## Публікація
-
-Сайт статичний, збірка не потрібна.
-
-- **GitHub Pages:** Settings → Pages → Deploy from a branch → `main`, папка `/ (root)`. Файл `CNAME` вже містить домен `transitionpoint.party`.
-- **Cloudflare (Workers static assets або Pages):** підключити репозиторій без команди збірки, вихідна папка — корінь. Файл `_headers` Cloudflare застосує автоматично.
-- **Ручне завантаження в Cloudflare:** заливати лише файли сайту: `index.html`, `404.html`, `_headers`, `.well-known/`, `css/`, `js/`, `fonts/`, `favicon.svg`, `ilona.jpg`, `og-image.jpg`, `robots.txt`, `sitemap.xml`. Без `node_modules/`, `package*.json`, конфігів інструментів, `README.md`, `CNAME` і `.git`.
-
-## Що де змінювати
-
-- **Тексти, фото, посилання на Telegram** — у `index.html`. Усі тексти погоджуються з Ілоною.
-- **Тривалості анімацій, чутливість жестів, розташування бульбашок** — у `js/config.js`.
-- **Кольори й розміри** — змінні на початку `css/style.css`.
-- **Адреса швидкого виходу** — `QUICK_EXIT_URL` у `js/config.js` і `href` посилання «Швидкий вихід» в `index.html`.
 
 ## Приватність і безпека
 
