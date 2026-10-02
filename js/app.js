@@ -51,7 +51,7 @@ export class App {
 
     this.renderer = new SceneRenderer(this.dom.canvas);
     if (!this.renderer.init()) document.documentElement.classList.add('no-webgl');
-    this.bubbles = new BubbleField(this.dom.faqField, this.dom.faqClose);
+    this.bubbles = new BubbleField(this.dom.faqFrame, this.dom.faqClose);
     this.input = new GestureInput((intent) => this.handleIntent(intent), () => this.isBusy());
   }
 
@@ -108,6 +108,7 @@ export class App {
     this.bubbles.layout(this.compactQuery.matches);
     this.confidenceAnchor = circleWithin(this.dom.confidenceBubble, this.dom.screens.water);
     this.closeAnchor = circleWithin(this.dom.faqClose, this.dom.screens.water);
+    this.bubbleOrigin = { x: this.dom.faqFrame.offsetLeft, y: this.dom.faqFrame.offsetTop };
   }
 
   /* ---------- loop ---------- */
@@ -228,8 +229,9 @@ export class App {
     const y = anchor.y + offset.y;
     data.set([x + (width / 2 - x) * t.grow, y + (height / 2 - y) * t.grow, anchor.r + (full - anchor.r) * t.grow, 1], 0);
 
+    const origin = this.bubbleOrigin;
     this.bubbles.forEachCircle((circle, index) => {
-      data.set([circle.x + offset.x, circle.y + offset.y, circle.r * (0.35 + 0.65 * t.appear), t.appear], (index + 1) * 4);
+      data.set([circle.x + origin.x + offset.x, circle.y + origin.y + offset.y, circle.r * (0.35 + 0.65 * t.appear), t.appear], (index + 1) * 4);
     });
 
     const close = this.closeAnchor;
@@ -513,6 +515,7 @@ function queryDom(root) {
     waterInfo: one('[data-water-info]'),
     confidenceBubble: one('[data-confidence-bubble]'),
     faqField: one('[data-faq]'),
+    faqFrame: one('[data-faq-frame]'),
     faqClose: one('[data-action="close-faq"]'),
   };
 }

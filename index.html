@@ -92,33 +92,35 @@
 
       <div class="faq" data-faq data-revealed="false" aria-labelledby="faq-title">
         <h2 class="visually-hidden" id="faq-title" tabindex="-1" data-focus="faq">А мені можна?</h2>
-        <div class="faq-bubble" data-bubble>
-          <button class="faq-bubble__toggle" type="button" aria-expanded="false" aria-controls="faq-answer-1" data-bubble-toggle>
-            <span class="faq-bubble__question" data-bubble-question><span class="reveal reveal--3">А якщо мій перехід ще не почався?</span></span>
+        <div class="faq__frame" data-faq-frame>
+          <div class="faq-bubble" data-bubble>
+            <button class="faq-bubble__toggle" type="button" aria-expanded="false" aria-controls="faq-answer-1" data-bubble-toggle>
+              <span class="faq-bubble__question" data-bubble-question><span class="reveal reveal--3">А якщо мій перехід ще не почався?</span></span>
+            </button>
+            <p class="faq-bubble__answer" id="faq-answer-1" aria-hidden="true" data-bubble-answer>Ти — це ти, незалежно від гормонів, операцій чи того, як ти виглядаєш. Тут нікому не треба нічого доводити, щоб бути своїм.</p>
+          </div>
+          <div class="faq-bubble" data-bubble>
+            <button class="faq-bubble__toggle" type="button" aria-expanded="false" aria-controls="faq-answer-2" data-bubble-toggle>
+              <span class="faq-bubble__question" data-bubble-question><span class="reveal reveal--5">А якщо в мене немає довідки чи діагнозу?</span></span>
+            </button>
+            <p class="faq-bubble__answer" id="faq-answer-2" aria-hidden="true" data-bubble-answer>Щоб знати, хто ти, документ не потрібен. Тут вірять тобі, а не папірцям.</p>
+          </div>
+          <div class="faq-bubble" data-bubble>
+            <button class="faq-bubble__toggle" type="button" aria-expanded="false" aria-controls="faq-answer-3" data-bubble-toggle>
+              <span class="faq-bubble__question" data-bubble-question><span class="reveal reveal--7">Хтось дізнається, що я тут?</span></span>
+            </button>
+            <p class="faq-bubble__answer" id="faq-answer-3" aria-hidden="true" data-bubble-answer>Чат закритий, і все сказане в ньому лишається всередині: жодних скріншотів чи імен назовні. Можна бути під будь-яким ім'ям.</p>
+          </div>
+          <div class="faq-bubble" data-bubble>
+            <button class="faq-bubble__toggle" type="button" aria-expanded="false" aria-controls="faq-answer-4" data-bubble-toggle>
+              <span class="faq-bubble__question" data-bubble-question><span class="reveal reveal--9">А якщо я ще не знаю напевно, хто я?</span></span>
+            </button>
+            <p class="faq-bubble__answer" id="faq-answer-4" aria-hidden="true" data-bubble-answer>Сумніви — теж частина шляху. Тут можна питати, думати вголос і шукати себе без поспіху й без осуду.</p>
+          </div>
+          <button class="faq__close reveal reveal--1" type="button" data-action="close-faq" aria-label="Закрити питання">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6 18 18M18 6 6 18"/></svg>
           </button>
-          <p class="faq-bubble__answer" id="faq-answer-1" aria-hidden="true" data-bubble-answer>Ти — це ти, незалежно від гормонів, операцій чи того, як ти виглядаєш. Тут нікому не треба нічого доводити, щоб бути своїм.</p>
         </div>
-        <div class="faq-bubble" data-bubble>
-          <button class="faq-bubble__toggle" type="button" aria-expanded="false" aria-controls="faq-answer-2" data-bubble-toggle>
-            <span class="faq-bubble__question" data-bubble-question><span class="reveal reveal--5">А якщо в мене немає довідки чи діагнозу?</span></span>
-          </button>
-          <p class="faq-bubble__answer" id="faq-answer-2" aria-hidden="true" data-bubble-answer>Щоб знати, хто ти, документ не потрібен. Тут вірять тобі, а не папірцям.</p>
-        </div>
-        <div class="faq-bubble" data-bubble>
-          <button class="faq-bubble__toggle" type="button" aria-expanded="false" aria-controls="faq-answer-3" data-bubble-toggle>
-            <span class="faq-bubble__question" data-bubble-question><span class="reveal reveal--7">Хтось дізнається, що я тут?</span></span>
-          </button>
-          <p class="faq-bubble__answer" id="faq-answer-3" aria-hidden="true" data-bubble-answer>Чат закритий, і все сказане в ньому лишається всередині: жодних скріншотів чи імен назовні. Можна бути під будь-яким ім'ям.</p>
-        </div>
-        <div class="faq-bubble" data-bubble>
-          <button class="faq-bubble__toggle" type="button" aria-expanded="false" aria-controls="faq-answer-4" data-bubble-toggle>
-            <span class="faq-bubble__question" data-bubble-question><span class="reveal reveal--9">А якщо я ще не знаю напевно, хто я?</span></span>
-          </button>
-          <p class="faq-bubble__answer" id="faq-answer-4" aria-hidden="true" data-bubble-answer>Сумніви — теж частина шляху. Тут можна питати, думати вголос і шукати себе без поспіху й без осуду.</p>
-        </div>
-        <button class="faq__close reveal reveal--1" type="button" data-action="close-faq" aria-label="Закрити питання">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6 18 18M18 6 6 18"/></svg>
-        </button>
       </div>
 
       <button class="back-button back-button--right" type="button" data-action="to-warm" aria-label="Повернутися назад">

@@ -14,11 +14,16 @@
 @font-face { font-family: 'Alegreya Sans'; src: url('../fonts/alegreya-sans-700.woff2') format('woff2'); font-weight: 700; font-display: swap; }
 
 /* 2. Tokens
-   --u is one "design unit": the layouts were designed on a 1040×650 canvas
-   (284×616 on narrow screens) and scale with the viewport. Text sizes use
-   max(rem, units) so browser zoom and font-size settings still enlarge them. */
+   --u is one "design unit": the layouts were designed on a 1040×650 frame
+   (284×616 on narrow screens) that scales with the viewport and stays centred;
+   --gutter is the empty space on each side of that frame on wide screens.
+   Text sizes use max(rem, units) so browser zoom and font-size settings still
+   enlarge them. */
 :root {
   --u: min(calc(100vw / 1040), calc(100vh / 650));
+  --frame-width: calc(1040 * var(--u));
+  --frame-height: calc(650 * var(--u));
+  --gutter: max(0px, calc((100vw - var(--frame-width)) / 2));
 
   --font-serif: 'Alegreya', Georgia, serif;
   --font-sans: 'Alegreya Sans', 'Segoe UI', system-ui, sans-serif;
@@ -50,6 +55,8 @@
 @media (max-width: 700px), (max-aspect-ratio: 5/6) {
   :root {
     --u: min(calc(100vw / 284), calc(100vh / 616));
+    --frame-width: calc(284 * var(--u));
+    --frame-height: calc(616 * var(--u));
     --edge: 20px;
   }
   @supports (height: 100dvh) {
@@ -183,7 +190,7 @@ button { font: inherit; }
 }
 
 /* 6. Warm room */
-.screen--warm .screen__scroll { align-items: center; padding: calc(40 * var(--u)) calc(100 * var(--u)); }
+.screen--warm .screen__scroll { align-items: center; padding: calc(40 * var(--u)) calc(var(--gutter) + 100 * var(--u)); }
 
 .warm { max-width: calc(640 * var(--u)); color: var(--warm-ink); }
 
@@ -209,7 +216,7 @@ button { font: inherit; }
   align-items: center;
   justify-content: space-between;
   gap: calc(60 * var(--u));
-  padding: calc(40 * var(--u)) calc(100 * var(--u)) calc(40 * var(--u)) calc(86 * var(--u));
+  padding: calc(40 * var(--u)) calc(var(--gutter) + 100 * var(--u)) calc(40 * var(--u)) calc(var(--gutter) + 86 * var(--u));
   color: var(--water-ink);
 }
 
@@ -276,7 +283,7 @@ button { font: inherit; }
 
 .back-button svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 
-.back-button--right { top: 50%; right: calc(14 * var(--u)); margin-top: -24px; color: var(--water-ink); }
+.back-button--right { top: 50%; right: calc(var(--gutter) + 14 * var(--u)); margin-top: -24px; color: var(--water-ink); }
 .screen--water[data-back="hidden"] .back-button { opacity: 0; pointer-events: none; }
 
 /* 8. Questions (bubble geometry is set from JS: --bubble-closed / --bubble-open, size, transform) */
@@ -287,6 +294,15 @@ button { font: inherit; }
   visibility: hidden;
   opacity: 0;
   color: var(--water-ink);
+}
+
+/* Bubbles live in the same centred frame as the rest of the layout. */
+.faq__frame {
+  position: absolute;
+  inset: 0;
+  width: var(--frame-width);
+  height: min(var(--frame-height), 100%);
+  margin: auto;
 }
 
 .faq-bubble { position: absolute; top: 0; left: 0; border-radius: 50%; }
@@ -562,13 +578,13 @@ span.reveal { display: inline-block; }
   .quick-exit__label { font-size: 0.6875rem; }
   .quick-exit__key { display: none; }
 
-  .screen--warm .screen__scroll { padding: calc(24 * var(--u)) calc(18 * var(--u)); }
+  .screen--warm .screen__scroll { padding: calc(24 * var(--u)) calc(var(--gutter) + 18 * var(--u)); }
   .warm { max-width: calc(248 * var(--u)); }
   .warm__title { font-size: max(1.75rem, calc(32 * var(--u))); }
   .warm__text { margin-top: calc(16 * var(--u)); font-size: max(1rem, calc(16 * var(--u))); }
   .warm .button { margin-top: calc(24 * var(--u)); }
 
-  .water-info { flex-direction: column; justify-content: center; gap: calc(24 * var(--u)); padding: calc(56 * var(--u)) calc(18 * var(--u)) calc(24 * var(--u)); }
+  .water-info { flex-direction: column; justify-content: center; gap: calc(24 * var(--u)); padding: calc(56 * var(--u)) calc(var(--gutter) + 18 * var(--u)) calc(24 * var(--u)); }
   .water-info__text { max-width: calc(248 * var(--u)); }
   .water-info__title { font-size: max(2rem, calc(40 * var(--u))); }
   .water-info__lead { margin-top: calc(12 * var(--u)); font-size: max(1rem, calc(15 * var(--u))); }
@@ -576,7 +592,7 @@ span.reveal { display: inline-block; }
   .button--glass { padding: calc(14 * var(--u)) calc(26 * var(--u)); }
   .confidence-bubble { width: calc(176 * var(--u)); height: calc(176 * var(--u)); padding: 0 calc(29 * var(--u)); }
   .confidence-bubble__title { font-size: max(1.125rem, calc(18 * var(--u))); }
-  .back-button--right { right: 0; }
+  .back-button--right { right: var(--gutter); }
 
   .faq { --bubble-pad: calc(14 * var(--u)); }
   .faq-bubble__question { font-size: max(1rem, calc(15 * var(--u))); }

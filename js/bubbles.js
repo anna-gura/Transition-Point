@@ -9,8 +9,8 @@ import { BUBBLES } from './config.js';
  */
 export class BubbleField {
   /**
-   * @param {HTMLElement} field container that covers the viewport
-   * @param {HTMLElement} closeButton
+   * @param {HTMLElement} field the centred layout frame that holds the bubbles
+   * @param {HTMLElement} closeButton must be positioned inside `field`
    */
   constructor(field, closeButton) {
     this.field = field;
