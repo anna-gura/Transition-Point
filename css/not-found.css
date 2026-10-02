@@ -1,0 +1,21 @@
+@font-face { font-family: 'Alegreya'; src: url('../fonts/alegreya.woff2') format('woff2'); font-weight: 400 900; font-display: swap; }
+@font-face { font-family: 'Alegreya Sans'; src: url('../fonts/alegreya-sans-400.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { height: 100%; margin: 0; }
+
+body {
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: radial-gradient(circle at 50% 45%, #2a2530 0, #000 60%);
+  color: #efe6f2;
+  font-family: 'Alegreya Sans', 'Segoe UI', system-ui, sans-serif;
+  text-align: center;
+}
+
+.not-found__code { margin: 0; font-size: 0.875rem; letter-spacing: 0.2em; opacity: 0.6; }
+.not-found__title { margin: 12px 0 28px; font: 500 clamp(2rem, 6vw, 3.5rem) / 1.1 'Alegreya', Georgia, serif; }
+.not-found__link { color: inherit; text-underline-offset: 6px; }
+.not-found__link:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
